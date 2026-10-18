@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 :root{--wine:#2a0f1f;--blush:#f2c9c0;--amber:#d98e32;--mist:#ede3f0;--ink:#1b1220}
 *{box-sizing:border-box;margin:0}
 html{scroll-behavior:smooth}
