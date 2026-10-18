@@ -1,0 +1,34 @@
+:root{--wine:#2a0f1f;--blush:#f2c9c0;--amber:#d98e32;--mist:#ede3f0;--ink:#1b1220}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--font-body),sans-serif;background:var(--mist);color:var(--ink)}
+h1,h2,h3,.logo{font-family:var(--font-display),serif;font-weight:500}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
+
+.nav{position:fixed;inset:0 0 auto;z-index:10;display:flex;justify-content:space-between;align-items:center;padding:1.2rem 2rem;color:var(--blush);mix-blend-mode:difference}
+.nav nav{display:flex;gap:1.6rem;font-size:.95rem}
+.logo{font-size:1.3rem;letter-spacing:.2em}
+
+.btn{display:inline-block;padding:.85rem 2rem;border:1px solid currentColor;border-radius:999px;transition:background .25s,color .25s}
+.promo .btn:hover{background:var(--blush);color:var(--wine)}
+
+.section{padding:6rem 2rem 3rem}
+.section h2,.promo h2{font-size:clamp(2rem,5vw,3.4rem);margin-bottom:2rem;text-align:center}
+.rail{display:flex;gap:1.5rem;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:1rem}
+.card{flex:0 0 min(72vw,280px);scroll-snap-align:start}
+.card-img{aspect-ratio:4/5;border-radius:6px;display:grid;place-items:center;margin-bottom:1rem}
+.mini-bottle{width:34%;height:46%;border-radius:6px;background:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.6);transition:transform .4s}
+.card:hover .mini-bottle{transform:translateY(-8px) rotate(-4deg)}
+.card h3{font-size:1.4rem}.notes{opacity:.7;font-size:.9rem;margin:.2rem 0 .6rem}.price{font-weight:500}
+.card button{margin-top:.8rem;width:100%;padding:.7rem;border:1px solid var(--ink);background:none;border-radius:999px;font:inherit;cursor:pointer;transition:background .2s,color .2s}
+.card button:hover{background:var(--ink);color:var(--mist)}
+
+.collections{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.collection{aspect-ratio:4/3;border-radius:6px;display:flex;align-items:flex-end;padding:1.5rem;font-family:var(--font-display);font-size:2rem;color:#fff;transition:transform .3s}
+.collection:hover{transform:scale(.985)}
+
+.promo{margin-top:4rem;padding:6rem 2rem;text-align:center;background:var(--wine);color:var(--blush)}
+.promo p{max-width:44ch;margin:0 auto 2rem;opacity:.85}
+.footer{display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;padding:2rem}
+

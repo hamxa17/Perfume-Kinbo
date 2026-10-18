@@ -1,0 +1,24 @@
+.hero{position:relative;height:100svh;min-height:620px;overflow:hidden;display:grid;place-items:center;background:var(--bg);color:var(--fg);transition:background-color .9s ease,color .9s ease}
+.word{position:absolute;top:44%;left:50%;font-size:clamp(5rem,24vw,22rem);line-height:1;letter-spacing:.02em;white-space:nowrap;opacity:.9;transform:translate(-50%,-50%);animation:word .9s cubic-bezier(.2,.8,.2,1) both}
+.orb{position:absolute;top:16%;left:8%;width:clamp(90px,16vw,200px);aspect-ratio:1;border-radius:50%;animation:orb .8s .15s cubic-bezier(.34,1.56,.64,1) both}
+.bottle{position:relative;z-index:2;margin-top:-4vh;display:flex;flex-direction:column;align-items:center;transform:scale(clamp(1,1vw,1.5));animation:pop .9s .1s cubic-bezier(.34,1.56,.64,1) both}
+.cap{width:54px;height:56px;border-radius:5px 5px 2px 2px;background:linear-gradient(90deg,#b9782a,#f1c27a,#b9782a)}
+.neck{width:26px;height:16px;background:#d7cfd9}
+.glass{width:190px;height:260px;border-radius:16px;padding:12px;display:flex;align-items:flex-end;background:linear-gradient(120deg,rgba(255,255,255,.5),rgba(255,255,255,.08) 40%,rgba(255,255,255,.3));border:1px solid rgba(255,255,255,.55);box-shadow:0 30px 60px -20px rgba(0,0,0,.45)}
+.liquid{width:100%;height:80%;border-radius:9px;background:linear-gradient(180deg,var(--l1),var(--l2));transition:background .9s}
+.copy{position:absolute;left:clamp(1.2rem,5vw,4rem);bottom:5.5rem;z-index:3;max-width:30ch;animation:fade .8s .35s both}
+.copy h2{font-size:1.9rem;margin-bottom:.4rem}
+.copy p{margin-bottom:1.2rem;font-size:.98rem;line-height:1.5}
+.btn{display:inline-block;padding:.85rem 2rem;border:1px solid currentColor;border-radius:999px;transition:background .25s,color .25s}
+.hero .btn:hover{background:var(--fg);color:var(--bg)}
+.controls{position:absolute;bottom:1.8rem;left:50%;transform:translateX(-50%);z-index:3;display:flex;align-items:center;gap:.7rem}
+.controls button{background:none;border:0;color:inherit;font-size:1.6rem;cursor:pointer;line-height:1}
+.dot{width:10px;height:10px;border-radius:50%;border:1px solid currentColor!important;font-size:0!important;opacity:.6}
+.dot.on{background:currentColor!important;opacity:1}
+
+@keyframes word{from{opacity:0;transform:translate(-30%,-50%)}to{opacity:.9;transform:translate(-50%,-50%)}}
+@keyframes orb{from{opacity:0;transform:scale(.2) rotate(-40deg)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(90px) rotate(-22deg) scale(.8)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.word,.orb,.bottle,.copy{animation:none}}
+@media (max-width:640px){.copy{bottom:4.5rem;right:1.2rem}.glass{width:150px;height:210px}}
