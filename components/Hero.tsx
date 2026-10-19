@@ -1,33 +1,44 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import SiteNav from "./SiteNav";
+import Folder from "./Folder";
+import { mockProducts } from "../data/mockProducts";
+import type { ScentFamily } from "../types/product";
+import { tk, ml } from "../data/format";
 import "./hero.css";
 
-// One entry per scent. Swapping a scent changes the background color, the giant
-// word behind the bottle, the bottle itself and the ingredient circle.
-const scents = [
-  { name: "Amber Noor", word: "AMBER", bg: "#d98e32", fg: "#2a0f1f", liquid: ["#f6d18b", "#a8560f"], note: "Amber, oud and saffron. Warm, slow, and hard to forget.", dot: "radial-gradient(circle at 35% 30%,#ffe9b8,#b8651a)" },
-  { name: "Velvet Hour", word: "VELVET", bg: "#7a2e4d", fg: "#f9dfe6", liquid: ["#e48aa8", "#4a1230"], note: "Plum, vanilla and soft leather for late evenings.", dot: "radial-gradient(circle at 35% 30%,#f2a0bd,#4a1230)" },
-  { name: "Monsoon", word: "MONSOON", bg: "#2f5d57", fg: "#e6f4ef", liquid: ["#bfe3d6", "#1f3f3b"], note: "Wet earth, vetiver and jasmine, just after the rain.", dot: "radial-gradient(circle at 35% 30%,#cdeee0,#1f3f3b)" },
-  { name: "Rajanigandha", word: "TUBEROSE", bg: "#ecc4d8", fg: "#3a1230", liquid: ["#fff1f7", "#c77aa5"], note: "Tuberose, white musk and cedar. Clean and bright.", dot: "radial-gradient(circle at 35% 30%,#fff,#d98fb5)" },
-];
+const look: Record<ScentFamily, { bg: string; fg: string; l1: string; l2: string }> = {
+  Woody: { bg: "#d98e32", fg: "#2a0f1f", l1: "#f6d18b", l2: "#a8560f" },
+  Oriental: { bg: "#7a2e4d", fg: "#f9dfe6", l1: "#e48aa8", l2: "#4a1230" },
+  Citrus: { bg: "#e8c24a", fg: "#2b2208", l1: "#fff3b0", l2: "#c98f10" },
+  Floral: { bg: "#ecc4d8", fg: "#3a1230", l1: "#fff1f7", l2: "#c77aa5" },
+  Fresh: { bg: "#2f5d57", fg: "#e6f4ef", l1: "#bfe3d6", l2: "#1f3f3b" },
+};
+
+// One scene per scent family, taken from the real product data.
+const scenes = Array.from(new Map(mockProducts.map((p) => [p.scentFamily, p] as const)).values()).slice(0, 4);
 
 export default function Hero() {
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);
   const touchX = useRef<number | null>(null);
-  const go = (n: number) => setI((n + scents.length) % scents.length);
+  const go = (n: number) => setI((n + scenes.length) % scenes.length);
 
   useEffect(() => {
     if (paused || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const t = setInterval(() => setI((p) => (p + 1) % scents.length), 4500);
+    const t = setInterval(() => setI((p) => (p + 1) % scenes.length), 4500);
     return () => clearInterval(t);
   }, [paused]);
 
-  const s = scents[i];
+  const p = scenes[i];
+  const c = look[p.scentFamily];
+  const fam = p.scentFamily.toLowerCase();
+
   return (
     <section
       className="hero"
-      style={{ "--bg": s.bg, "--fg": s.fg, "--l1": s.liquid[0], "--l2": s.liquid[1] } as React.CSSProperties}
+      style={{ "--bg": c.bg, "--fg": c.fg, "--l1": c.l1, "--l2": c.l2 } as React.CSSProperties}
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }}
@@ -38,26 +49,41 @@ export default function Hero() {
         touchX.current = null;
       }}
     >
-      {/* key={i} remounts these on every change, which replays their entrance animation */}
-      <h1 className="word" key={`w${i}`}>{s.word}</h1>
-      <div className="orb" key={`o${i}`} style={{ background: s.dot }} aria-hidden />
-      <div className="bottle" key={`b${i}`} aria-hidden>
-        <div className="cap" /><div className="neck" />
-        <div className="glass"><div className="liquid" /></div>
+      <SiteNav />
+      <h1 className="word" key={`w${p.id}`}>{p.name.split(" ")[0]}</h1>
+      <div className="bottle-pos" aria-hidden>
+        <div className="bottle" key={`b${p.id}`}>
+          <div className="cap" /><div className="neck" />
+          <div className="glass-bottle"><div className="liquid" /></div>
+        </div>
       </div>
 
-      <div className="copy" key={`c${i}`}>
-        <h2>{s.name}</h2>
-        <p>{s.note}</p>
-        <a className="btn" href="#bestsellers">Shop now</a>
-      </div>
+      <Folder
+        key={`f${p.id}`}
+        className="hero-folder"
+        tabs={[
+          { label: "Scent", body: (
+            <>
+              <p className="mono">{p.brand} · {p.scentFamily}</p>
+              <h2 className="hname">{p.name}</h2>
+              <p className="hfrom">From Tk {tk(p.minPrice)}</p>
+              <Link className="btn-link" href={`/store?scent=${fam}`}>Shop now</Link>
+            </>
+          ) },
+          { label: "Sizes", body: (
+            <ul>{p.variants.map((v) => (
+              <li key={v.volume} className="hsz"><span>{ml(v.volume)}</span><span>Tk {tk(v.price)}</span></li>
+            ))}</ul>
+          ) },
+        ]}
+      />
 
       <div className="controls">
-        <button onClick={() => go(i - 1)} aria-label="Previous scent">‹</button>
-        {scents.map((x, n) => (
-          <button key={x.name} className={n === i ? "dot on" : "dot"} onClick={() => go(n)} aria-label={x.name} />
+        <button type="button" onClick={() => go(i - 1)} aria-label="Previous scent">‹</button>
+        {scenes.map((s, n) => (
+          <button key={s.id} type="button" className={n === i ? "dot on" : "dot"} onClick={() => go(n)} aria-label={s.name} />
         ))}
-        <button onClick={() => go(i + 1)} aria-label="Next scent">›</button>
+        <button type="button" onClick={() => go(i + 1)} aria-label="Next scent">›</button>
       </div>
     </section>
   );
