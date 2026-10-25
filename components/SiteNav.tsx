@@ -1,15 +1,22 @@
-import Link from "next/link";
+"use client";
 
-// Small, evenly spaced links across the top of a scene. They take their colour
-// from the scene they sit on.
+import Link from "next/link";
+import { useCart } from "./CartProvider";
+
+// A floating glass pill, 90% wide, pinned to the top of every page.
 export default function SiteNav() {
+  const { count, setOpen } = useCart();
   return (
     <header className="nav caps">
-      <Link href="/store">Shop</Link>
-      <Link href="/#shelf">Scents</Link>
-      <Link href="/#collections">Collections</Link>
-      <Link href="/credits">Credits</Link>
-      <span aria-label="Cart, 0 items">Cart (0)</span>
+      <Link href="/" className="nav-brand swash" aria-label="Kinbo home">Kinbo</Link>
+      <nav className="nav-links">
+        <Link href="/store">Shop</Link>
+        <Link href="/#shelf">Scents</Link>
+        <Link href="/#collections">Collections</Link>
+      </nav>
+      <button type="button" className="nav-bag" onClick={() => setOpen(true)} aria-label={`Open bag, ${count} items`}>
+        Bag ({count})
+      </button>
     </header>
   );
 }

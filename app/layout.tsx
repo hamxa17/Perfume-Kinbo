@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Instrument_Sans } from "next/font/google";
 import "./globals.css";
+import CartProvider from "../components/CartProvider";
+import SiteNav from "../components/SiteNav";
 
 const display = Bodoni_Moda({
   subsets: ["latin"],
@@ -22,7 +24,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${display.variable} ${sans.variable}`}>
-      <body>{children}</body>
+      <body>
+        <CartProvider>
+          <SiteNav />
+          {children}
+        </CartProvider>
+      </body>
     </html>
   );
 }

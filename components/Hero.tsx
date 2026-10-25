@@ -6,7 +6,6 @@ import { mockProducts } from "../data/mockProducts";
 import { tk } from "../data/format";
 import Bottle from "./Bottle";
 import Dapple from "./Dapple";
-import SiteNav from "./SiteNav";
 
 // Hero shows the studio-photo perfumes only (they cut out cleanly).
 const featured = mockProducts.filter((p) => p.cutout);
@@ -33,7 +32,6 @@ export default function Hero() {
       onMouseLeave={() => setPaused(false)}
     >
       <Dapple />
-      <SiteNav />
       <div className="hero-stage">
         <h1 className="hero-title" aria-label="Kinbo">Kinbo</h1>
         <div className="hero-disc" style={{ background: p.tone ?? "#cbcecc" }} />

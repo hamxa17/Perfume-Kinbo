@@ -16,10 +16,6 @@ export default function Footer() {
           <a href="https://wa.me/">WhatsApp</a>
           <a href="https://www.instagram.com/">Instagram</a>
         </div>
-        <div>
-          <p className="foot-h">Info</p>
-          <Link href="/credits">Image credits</Link>
-        </div>
       </div>
       <p className="foot-mark" aria-hidden="true">Kinbo</p>
       <p className="fine">

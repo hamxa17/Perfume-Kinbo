@@ -5,15 +5,16 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { mockProducts } from "../data/mockProducts";
 import type { Product } from "../types/product";
 import { tk, ml } from "../data/format";
-import SiteNav from "./SiteNav";
 import Footer from "./Footer";
 import Bottle from "./Bottle";
 import Dapple from "./Dapple";
+import { useCart } from "./CartProvider";
 
 const filterKeys = ["availability", "price", "scent", "volume", "sort"] as const;
 
 export default function StoreCatalog() {
   const router = useRouter();
+  const cart = useCart();
   const [picked, setPicked] = useState<Record<string, string>>({});
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -122,8 +123,7 @@ export default function StoreCatalog() {
     return value !== null && value !== "all" && value !== "featured";
   });
 
-  // Temporary integration point for your cart logic.
-  const onAdd = (p: Product, volume: string) => console.log("Add to bag:", p.id, volume);
+  const onAdd = (p: Product, volume: string) => cart.add(p, volume);
 
   const filters = [
     { key: "availability", label: "Availability", value: availability, opts: [["all", "All"], ["in-stock", "In stock"], ["sold-out", "Sold out"]] },
@@ -137,7 +137,6 @@ export default function StoreCatalog() {
     <main>
       <section className="scene scene-fog store-hero">
         <Dapple />
-        <SiteNav />
         <p className="caps" style={{ opacity: 0.6, position: "relative", zIndex: 1 }}>Kinbo / Index</p>
         <h1 style={{ position: "relative", zIndex: 1 }}>Fragrances</h1>
       </section>
