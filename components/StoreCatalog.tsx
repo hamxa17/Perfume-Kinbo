@@ -4,19 +4,18 @@ import { useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { mockProducts } from "../data/mockProducts";
 import type { Product } from "../types/product";
-import { tk } from "../data/format";
-import SiteNav from "./SiteNav";
+import { tk, ml } from "../data/format";
 import Footer from "./Footer";
-import ProductStage from "./ProductStage";
+import Bottle from "./Bottle";
+import Dapple from "./Dapple";
+import { useCart } from "./CartProvider";
 
 const filterKeys = ["availability", "price", "scent", "volume", "sort"] as const;
 
-const priceText = (p: Product) =>
-  p.minPrice === p.maxPrice ? `Tk ${tk(p.minPrice)}` : `Tk ${tk(p.minPrice)} – ${tk(p.maxPrice)}`;
-
 export default function StoreCatalog() {
   const router = useRouter();
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const cart = useCart();
+  const [picked, setPicked] = useState<Record<string, string>>({});
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
@@ -124,9 +123,7 @@ export default function StoreCatalog() {
     return value !== null && value !== "all" && value !== "featured";
   });
 
-  const active = filteredProducts.find((p) => p.id === activeId) ?? filteredProducts[0];
-  // Temporary integration point for your cart logic.
-  const onAdd = (p: Product, v: { volume: string }) => console.log("Add to bag:", p.id, v.volume);
+  const onAdd = (p: Product, volume: string) => cart.add(p, volume);
 
   const filters = [
     { key: "availability", label: "Availability", value: availability, opts: [["all", "All"], ["in-stock", "In stock"], ["sold-out", "Sold out"]] },
@@ -137,55 +134,71 @@ export default function StoreCatalog() {
   ];
 
   return (
-    <main style={{ position: "relative" }}>
-      <SiteNav />
-      <header className="store-head">
-        <p className="mono" style={{ color: "var(--mute)" }}>Kinbo / Index</p>
-        <h1>Fragrances</h1>
-      </header>
+    <main>
+      <section className="scene scene-fog store-hero">
+        <Dapple />
+        <p className="caps" style={{ opacity: 0.6, position: "relative", zIndex: 1 }}>Kinbo / Index</p>
+        <h1 style={{ position: "relative", zIndex: 1 }}>Fragrances</h1>
+      </section>
 
-      <section className="sec" style={{ paddingTop: "1.5rem" }}>
-        <div className="rule-head mono" aria-live="polite">
-          <span>Showing {filteredProducts.length} of {mockProducts.length}</span>
-          {hasActiveFilters && <button type="button" onClick={clearFilters} className="btn-link mono">Clear filters</button>}
-        </div>
+      <section className="store-body">
         <div className="filters">
           {filters.map((f) => (
             <div key={f.key}>
-              <label htmlFor={`${f.key}-filter`} className="mono">{f.label}</label>
+              <label htmlFor={`${f.key}-filter`} className="caps">{f.label}</label>
               <select id={`${f.key}-filter`} value={f.value} onChange={(e) => updateFilter(f.key, e.target.value)}>
                 {f.opts.map(([v, t]) => <option key={v} value={v}>{t}</option>)}
               </select>
             </div>
           ))}
         </div>
+        <div className="count caps" aria-live="polite">
+          <span>Showing {filteredProducts.length} of {mockProducts.length}</span>
+          {hasActiveFilters && <button type="button" onClick={clearFilters}>Clear filters</button>}
+        </div>
 
-        {active ? (
-          <div className="store-grid">
-            <ol>
-              {filteredProducts.map((p, n) => (
-                <li key={p.id}>
-                  <button type="button" className={`row${p.id === active.id ? " on" : ""}`} onMouseEnter={() => setActiveId(p.id)} onFocus={() => setActiveId(p.id)} onClick={() => setActiveId(p.id)}>
-                    <span className="mono idx">{String(n + 1).padStart(2, "0")}</span>
-                    <span className="rname">{p.name}</span>
-                    <span className="mono fam">{p.scentFamily} · {p.brand}</span>
-                    <span className="mono price">{priceText(p)}</span>
-                  </button>
-                  {p.id === active.id && <div className="inline-stage"><ProductStage key={p.id} product={p} onAdd={onAdd} /></div>}
+        {filteredProducts.length > 0 ? (
+          <ul className="grid">
+            {filteredProducts.map((p) => {
+              const vol = picked[p.id] ?? p.variants.find((v) => v.inStock)?.volume ?? p.variants[0].volume;
+              const variant = p.variants.find((v) => v.volume === vol) ?? p.variants[0];
+              return (
+                <li key={p.id} className="tile">
+                  <div className="shelf-tile" style={{ ["--tone" as string]: p.cutout ? (p.tone ?? "#cfd2d0") : "#cfd2d0" }}>
+                    <Bottle product={p} />
+                  </div>
+                  <div className="meta">
+                    <p className="caps" style={{ opacity: 0.6 }}>{p.brand} · {p.scentFamily}</p>
+                    <span className="swash">{p.name}</span>
+                    <div className="sizes">
+                      {p.variants.map((v) => (
+                        <button
+                          key={v.volume}
+                          type="button"
+                          aria-pressed={v.volume === vol}
+                          disabled={!v.inStock}
+                          onClick={() => setPicked((m) => ({ ...m, [p.id]: v.volume }))}
+                        >
+                          {ml(v.volume)}
+                        </button>
+                      ))}
+                    </div>
+                    <button type="button" className="add caps" disabled={!variant.inStock} onClick={() => onAdd(p, variant.volume)}>
+                      {variant.inStock ? `Add to bag · Tk ${tk(variant.price)}` : "Sold out"}
+                    </button>
+                  </div>
                 </li>
-              ))}
-            </ol>
-            <aside className="stage-col"><ProductStage key={active.id} product={active} onAdd={onAdd} /></aside>
-          </div>
+              );
+            })}
+          </ul>
         ) : (
-          <div style={{ padding: "4rem 0" }}>
-            <h2 style={{ fontSize: "2rem" }}>No fragrances found</h2>
+          <div className="empty">
+            <h2>No fragrances found</h2>
             <p style={{ color: "var(--mute)", margin: ".6rem 0 1rem" }}>Try changing your filters.</p>
-            <button type="button" onClick={clearFilters} className="btn-link">Reset filters</button>
+            <button type="button" onClick={clearFilters} className="caps" style={{ textDecoration: "underline" }}>Reset filters</button>
           </div>
         )}
       </section>
-      <div style={{ height: "4rem" }} />
       <Footer />
     </main>
   );
