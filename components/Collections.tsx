@@ -12,7 +12,6 @@ const pick = (f: string) =>
 
 export default function Collections() {
   const [active, setActive] = useState(families[0]);
-  const show = pick(active);
 
   return (
     <section id="collections" className="scene scene-stone arc coll-scene">
@@ -28,14 +27,20 @@ export default function Collections() {
                 onFocus={() => setActive(f)}
               >
                 <span>{f}</span>
-                <span className="caps">{mockProducts.filter((p) => p.scentFamily === f).length} →</span>
               </Link>
             </li>
           ))}
         </ul>
-        <div className="coll-show" key={show.id}>
-          <div className="hero-disc" style={{ background: show.tone ?? "#d4d7d5" }} />
-          <Bottle product={show} />
+        <div className="coll-show" aria-hidden="true">
+          {families.map((f) => {
+            const p = pick(f);
+            return (
+              <div key={f} className={`show${f === active ? " on" : ""}`}>
+                <div className="hero-disc" style={{ background: p.tone ?? "#d4d7d5" }} />
+                <Bottle product={p} eager />
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>

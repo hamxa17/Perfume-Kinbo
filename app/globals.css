@@ -50,7 +50,7 @@
   .scene-graphite .btn-rect:hover { background: var(--paper); color: var(--ink); border-color: var(--paper); }
 
   /* ---------- scenes ---------- */
-  .scene { position: relative; overflow: hidden; isolation: isolate; }
+  .scene { position: relative; overflow: hidden; overflow: clip; isolation: isolate; }
   .scene-fog { background: var(--fog); }
   .scene-stone { background: var(--stone); }
   .scene-graphite { background: var(--graphite); color: #e6e8e7; }
@@ -209,11 +209,13 @@
   }
   .coll-list li:last-child a { border-bottom: 1px solid rgba(32,35,37,.25); }
   .coll-list a.on, .coll-list a:hover { opacity: 1; padding-left: .25em; }
-  .coll-list .caps { font-style: normal; font-family: var(--font-sans-k), sans-serif; }
-  .coll-show { position: relative; display: grid; place-items: center; aspect-ratio: .85; }
+    .coll-show { position: relative; aspect-ratio: .85; }
+  .coll-show .show { position: absolute; inset: 0; display: grid; place-items: center; }
+  .coll-show .show > * { opacity: 0; transition: opacity .45s ease; }
+  .coll-show .show.on > * { opacity: 1; }
   .coll-show .hero-disc { width: 70%; translate: -50% -50%; top: 50%; }
-  .coll-show .bottle, .coll-show .photo { position: relative; z-index: 2; height: 76%; width: auto; animation: rise .6s both; }
-  .coll-show .photo { aspect-ratio: .75; border-radius: 999px 999px 8px 8px; }
+  .coll-show .bottle { position: relative; z-index: 2; height: 76%; width: auto; }
+  .coll-show .photo { position: relative; z-index: 2; width: 56%; height: auto; aspect-ratio: .75; object-fit: cover; border-radius: 999px 999px 8px 8px; }
 
   /* ---------- footer ---------- */
   .foot { padding-bottom: 2rem; margin-top: -7vw; }
