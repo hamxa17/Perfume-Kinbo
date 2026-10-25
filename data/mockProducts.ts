@@ -20,6 +20,125 @@ function createProduct(product: ProductInput): Product {
 }
 
 export const mockProducts: Product[] = [
+  // ---- Well-known perfumes -------------------------------------------------
+  // Photos are free-licensed (Wikimedia Commons). Prices and sizes below are
+  // PLACEHOLDERS for the mock catalogue, not real retail prices. Brand names
+  // and bottle designs belong to their owners.
+  createProduct({
+    id: "paco-rabanne-1-million",
+    name: "1 Million",
+    brand: "Paco Rabanne",
+    currency: "BDT",
+    scentFamily: "Oriental",
+    images: [
+      "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/60/2023_Woda_toaletowa_Paco_Rabanne_1_Million.jpg/960px-2023_Woda_toaletowa_Paco_Rabanne_1_Million.jpg",
+    ],
+    cutout: true,
+    imageSize: { w: 960, h: 1320 },
+    crop: { x: 0.27, y: 0.05, w: 0.5, h: 0.91 },
+    lift: 1.05,
+    tone: "#cbc5b8",
+    credit: {
+      title: "2023 Woda toaletowa Paco Rabanne 1 Million.jpg",
+      author: "Jacek Halicki",
+      license: "CC BY-SA 4.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/4.0/",
+      source:
+        "https://commons.wikimedia.org/wiki/File:2023_Woda_toaletowa_Paco_Rabanne_1_Million.jpg",
+      changes: "Cropped to the bottle and blended into the page background.",
+    },
+    variants: [
+      { volume: "30ml", price: 5200, inStock: true },
+      { volume: "50ml", price: 7500, inStock: true },
+      { volume: "100ml", price: 10500, inStock: true },
+    ],
+  }),
+
+  createProduct({
+    id: "chanel-no-5",
+    name: "No. 5",
+    brand: "Chanel",
+    currency: "BDT",
+    scentFamily: "Floral",
+    images: [
+      "https://upload.wikimedia.org/wikipedia/commons/8/85/CHANEL_No5_parfum.jpg",
+    ],
+    cutout: true,
+    imageSize: { w: 400, h: 727 },
+    crop: { x: 0.08, y: 0.03, w: 0.84, h: 0.9 },
+    tone: "#c8cbc6",
+    credit: {
+      title: "CHANEL No5 parfum.jpg",
+      author: "arz",
+      license: "Public domain",
+      source: "https://commons.wikimedia.org/wiki/File:CHANEL_No5_parfum.jpg",
+      changes: "Cropped to the bottle and blended into the page background.",
+    },
+    variants: [
+      { volume: "30ml", price: 7800, inStock: true },
+      { volume: "50ml", price: 11500, inStock: true },
+      { volume: "100ml", price: 16500, inStock: true },
+    ],
+  }),
+
+  createProduct({
+    id: "armani-acqua-di-gio",
+    name: "Acqua di Giò",
+    brand: "Giorgio Armani",
+    currency: "BDT",
+    scentFamily: "Fresh",
+    images: [
+      "https://upload.wikimedia.org/wikipedia/commons/5/54/Acqua_di_Gio.jpg",
+    ],
+    cutout: true,
+    imageSize: { w: 500, h: 950 },
+    crop: { x: 0.08, y: 0.02, w: 0.83, h: 0.95 },
+    tone: "#bec6ca",
+    credit: {
+      title: "Acqua di Gio.jpg",
+      author: "Gonna Fly Now",
+      license: "CC BY-SA 2.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/2.0/",
+      source: "https://commons.wikimedia.org/wiki/File:Acqua_di_Gio.jpg",
+      changes: "Cropped to the bottle and blended into the page background.",
+    },
+    variants: [
+      { volume: "30ml", price: 5500, inStock: true },
+      { volume: "50ml", price: 8000, inStock: true },
+      { volume: "100ml", price: 11000, inStock: true },
+    ],
+  }),
+
+  createProduct({
+    id: "jpg-le-male",
+    name: "Le Mâle",
+    brand: "Jean Paul Gaultier",
+    currency: "BDT",
+    scentFamily: "Oriental",
+    images: [
+      "https://upload.wikimedia.org/wikipedia/commons/f/fa/Gaultier_Le_M%C3%A2le.jpg",
+    ],
+    cutout: true,
+    imageSize: { w: 818, h: 700 },
+    crop: { x: 0.04, y: 0, w: 0.4, h: 1 },
+    tone: "#c3c7c1",
+    credit: {
+      title: "Gaultier Le Mâle.jpg",
+      author: "Bruce The Deus",
+      license: "CC BY-SA 3.0",
+      licenseUrl: "https://creativecommons.org/licenses/by-sa/3.0/",
+      source: "https://commons.wikimedia.org/wiki/File:Gaultier_Le_M%C3%A2le.jpg",
+      changes:
+        "Cropped to the bottle (the original also shows its box) and blended into the page background.",
+    },
+    variants: [
+      { volume: "30ml", price: 5200, inStock: true },
+      { volume: "50ml", price: 7800, inStock: true },
+      { volume: "100ml", price: 10800, inStock: true },
+    ],
+  }),
+
+  // ---- Sample catalogue (stock photos, fictional brands) -------------------
   createProduct({
     id: "amber-veil",
     name: "Amber Veil",

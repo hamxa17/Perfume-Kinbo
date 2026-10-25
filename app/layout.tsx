@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
-import { Bodoni_Moda, Jost, DM_Mono } from "next/font/google";
+import { Bodoni_Moda, Instrument_Sans } from "next/font/google";
 import "./globals.css";
 
-const display = Bodoni_Moda({ subsets: ["latin"], variable: "--font-display", style: ["normal", "italic"] });
-const body = Jost({ subsets: ["latin"], variable: "--font-body" });
-const mono = DM_Mono({ subsets: ["latin"], weight: "400", variable: "--font-mono-k" });
+const display = Bodoni_Moda({
+  subsets: ["latin"],
+  variable: "--font-display",
+  style: ["normal", "italic"],
+  weight: ["500", "700"],
+});
+const sans = Instrument_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans-k",
+  weight: ["400", "500"],
+});
 
 export const metadata: Metadata = {
   title: "Kinbo — Perfume",
-  description: "Small-batch perfumes, delivered across Bangladesh.",
+  description: "Perfumes worth wearing, delivered across Bangladesh.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${mono.variable}`}>
+    <html lang="en" className={`${display.variable} ${sans.variable}`}>
       <body>{children}</body>
     </html>
   );
